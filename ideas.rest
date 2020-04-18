@@ -1,1 +1,33 @@
-# _*_ restclient _*_
+# _*_restclient_*_
+
+# Get all ideas
+GET http://localhost:4000/ideas
+
+
+# Create an idea
+POST http://localhost:4000/ideas
+content-type: application/json
+
+{
+    "idea": "test project",
+    "description": "test description"
+}
+
+
+# Get an idea by id
+GET http://localhost:4000/ideas/c8b530db-8dc1-42c4-ac00-12cb0dfd43dd
+
+# Update an idea
+PUT http://localhost:4000/ideas/c8b530db-8dc1-42c4-ac00-12cb0dfd43dd
+content-type: application/json
+
+{
+    "description": "updated description"
+}
+
+# Delete an Idea
+DELETE http://localhost:4000/ideas/c8b530db-8dc1-42c4-ac00-12cb0dfd43dd
+
+
+# Get filtered ideas
+GET http://localhost:4000/ideas
