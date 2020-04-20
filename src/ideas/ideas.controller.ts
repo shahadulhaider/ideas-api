@@ -1,24 +1,28 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
-  Delete,
-  Body,
-  Param,
+  UsePipes,
 } from '@nestjs/common';
-import { IdeasService } from './ideas.service';
+import { CustomValidationPipe } from '../shared/custom-validation.pipe';
 import { IdeaDto } from './idea.dto';
+import { IdeasService } from './ideas.service';
 
 @Controller('ideas')
 export class IdeasController {
   constructor(private ideasService: IdeasService) {}
+
   @Get()
-  getALlIdeas() {
+  getAllIdeas() {
     return this.ideasService.getAll();
   }
 
   @Post()
+  @UsePipes(CustomValidationPipe)
   createIdea(@Body() data: IdeaDto) {
     return this.ideasService.create(data);
   }
@@ -29,6 +33,7 @@ export class IdeasController {
   }
 
   @Put(':id')
+  @UsePipes(CustomValidationPipe)
   updateIdea(@Param('id') id: string, @Body() data: Partial<IdeaDto>) {
     return this.ideasService.update(id, data);
   }
