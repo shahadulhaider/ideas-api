@@ -6,6 +6,8 @@ const port = process.env.PORT;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('/api');
+
   const logger = new Logger();
   await app.listen(port, () => {
     logger.log(`Server started on http://localhost:${port}`, 'Bootstrap');

@@ -13,7 +13,7 @@ content-type: application/json
 
 {
     "idea": "hello",
-    "description": true
+    "description": "hello from nestjs"
 }
 # test not found
 GET http://localhost:4000/ideas

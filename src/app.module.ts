@@ -9,12 +9,14 @@ import { IdeasModule } from './ideas/ideas.module';
 import { CustomValidationPipe } from './shared/custom-validation.pipe';
 import { HttpErrorFilter } from './shared/http-error.filter';
 import { LoggingInterceptor } from './shared/logging.interceptor';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeOrmConfig),
     IdeasModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
