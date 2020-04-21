@@ -1,24 +1,27 @@
 # -*- mode: restclinet -*-
 #
+:headers = <<
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4YzQ3MjlmLTEzOWItNGY0MC05MTk4LWU3YmZkZDY3ZTUyYyIsInVzZXJuYW1lIjoiemF5YW4iLCJpYXQiOjE1ODc0ODI2NjIsImV4cCI6MTU4ODA4NzQ2Mn0.cGy3eNB1p7TmslfAPRhdJV0N9F-Awhg89zDLtcDNiOM
+#
 
 # Get users
 GET http://localhost:4000/api/users
-
+:headers
 
 # Register
 POST http://localhost:4000/api/users/register
 content-type: application/json
-
 {
     "username": "nusayra",
     "password": "123456"
 }
 
 # login
-POST http://localhost:4000/api/users/register
+POST http://localhost:4000/api/users/login
 content-type: application/json
 
 {
-    "username": "nusayra",
-    "password": "123456"
+    "username": "zayan",
+    "password": "habijabi"
 }
