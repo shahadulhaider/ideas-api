@@ -1,0 +1,24 @@
+# -*- mode: restclinet -*-
+#
+
+# Get users
+GET http://localhost:4000/api/users
+
+
+# Register
+POST http://localhost:4000/api/users/register
+content-type: application/json
+
+{
+    "username": "nusayra",
+    "password": "123456"
+}
+
+# login
+POST http://localhost:4000/api/users/register
+content-type: application/json
+
+{
+    "username": "nusayra",
+    "password": "123456"
+}
