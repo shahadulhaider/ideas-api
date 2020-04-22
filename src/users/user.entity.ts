@@ -7,8 +7,10 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 import { UserRO } from './user.ro';
+import { Idea } from 'src/ideas/idea.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -27,6 +29,12 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
+  @OneToMany(
+    type => Idea,
+    idea => idea.author,
+  )
+  ideas: Idea[];
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
@@ -44,10 +52,14 @@ export class User extends BaseEntity {
   }
 
   toResponseObject(showToken = true): UserRO {
-    const { password, token, ...rest } = this;
+    const { id, created, username, token } = this;
+    const resObj: any = { id, created, username };
     if (showToken) {
-      return { ...rest, token };
+      resObj.token = token;
     }
-    return { ...rest };
+    if (this.ideas) {
+      resObj.ideas = this.ideas;
+    }
+    return resObj;
   }
 }

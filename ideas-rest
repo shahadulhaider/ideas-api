@@ -1,0 +1,44 @@
+# _*_ restclient _*_
+:auth = Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4YzQ3MjlmLTEzOWItNGY0MC05MTk4LWU3YmZkZDY3ZTUyYyIsInVzZXJuYW1lIjoiemF5YW4iLCJpYXQiOjE1ODc0ODI2NjIsImV4cCI6MTU4ODA4NzQ2Mn0.cGy3eNB1p7TmslfAPRhdJV0N9F-Awhg89zDLtcDNiOM
+
+# main route
+GET http://localhost:4000/api/
+
+# Get all ideas
+GET http://localhost:4000/api/ideas
+
+
+# Create an idea
+POST http://localhost:4000/api/ideas
+content-type: application/json
+:auth
+
+{
+    "idea": "hello world",
+    "description": "hello from restclient"
+}
+# test not found
+GET http://localhost:4000/api/ideas
+
+# Get an idea by id
+GET http://localhost:4000/api/ideas/6e40ff89-8d57-4033-b62a-5d08afb36fef
+
+# get an idea
+GET http://localhost:4000/api/ideas/1234142524
+
+# Update an idea
+PUT http://localhost:4000/api/ideas/6e40ff89-8d57-4033-b62a-5d08afb36fef
+content-type: application/json
+:auth
+{
+    "idea": "Driving challenge",
+    "description": "Drive the car through the jungle"
+}
+
+# Delete an Idea
+DELETE http://localhost:4000/api/ideas/e8243bca-f0db-46e0-81d1-6b89a2ef9f3c
+:auth
+
+
+# Get filtered ideas
+GET http://localhost:4000/api/ideas
