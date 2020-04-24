@@ -7,6 +7,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -31,4 +33,12 @@ export class Idea extends BaseEntity {
     author => author.ideas,
   )
   author: User;
+
+  @ManyToMany(type => User, { cascade: true })
+  @JoinTable()
+  upvotes: User[];
+
+  @ManyToMany(type => User, { cascade: true })
+  @JoinTable()
+  downvotes: User[];
 }

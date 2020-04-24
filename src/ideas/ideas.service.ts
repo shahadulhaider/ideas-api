@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { IdeaDto } from './idea.dto';
 import { Idea } from './idea.entity';
 import { IdeaRO } from './idea.ro';
+import { Votes } from 'src/shared/votes.enum';
 
 @Injectable()
 export class IdeasService {
@@ -16,7 +17,9 @@ export class IdeasService {
   ) {}
 
   async getAll(): Promise<IdeaRO[]> {
-    const ideas = await this.ideasRepository.find({ relations: ['author'] });
+    const ideas = await this.ideasRepository.find({
+      relations: ['author', 'upvotes', 'downvotes'],
+    });
     return ideas.map(idea => this.toResponseObject(idea));
   }
 
@@ -30,7 +33,7 @@ export class IdeasService {
   async read(id: string): Promise<IdeaRO> {
     try {
       const idea = await this.ideasRepository.findOne(id, {
-        relations: ['author'],
+        relations: ['author', 'upvotes', 'downvotes'],
       });
       return this.toResponseObject(idea);
     } catch (err) {
@@ -70,11 +73,100 @@ export class IdeasService {
     }
   }
 
+  async bookmark(id: string, userId: string) {
+    const idea = await this.ideasRepository.findOne(id);
+    const user = await this.userRepository.findOne(
+      { id: userId },
+      { relations: ['bookmarks'] },
+    );
+
+    if (user.bookmarks.filter(bookmark => bookmark.id === idea.id).length < 1) {
+      user.bookmarks.push(idea);
+      await this.userRepository.save(user);
+    } else {
+      throw new HttpException(
+        'Idea already bookmarked',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return user.toResponseObject();
+  }
+
+  async unbookmark(id: string, userId: string) {
+    const idea = await this.ideasRepository.findOne(id);
+    const user = await this.userRepository.findOne(
+      { id: userId },
+      { relations: ['bookmarks'] },
+    );
+
+    if (user.bookmarks.filter(bookmark => bookmark.id === idea.id).length > 0) {
+      user.bookmarks = user.bookmarks.filter(
+        bookmark => bookmark.id !== idea.id,
+      );
+      await this.userRepository.save(user);
+    } else {
+      throw new HttpException(
+        'Idea already unbookmarked',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return user.toResponseObject();
+  }
+
+  async upvote(id: string, userId: string) {
+    let idea = await this.ideasRepository.findOne(id, {
+      relations: ['author', 'upvotes', 'downvotes'],
+    });
+    const user = await this.userRepository.findOne({ id: userId });
+
+    idea = await this.vote(idea, user, Votes.UP);
+    return this.toResponseObject(idea);
+  }
+
+  async downvote(id: string, userId: string) {
+    let idea = await this.ideasRepository.findOne(id, {
+      relations: ['author', 'upvotes', 'downvotes'],
+    });
+    const user = await this.userRepository.findOne({ id: userId });
+
+    idea = await this.vote(idea, user, Votes.DOWN);
+    return this.toResponseObject(idea);
+  }
+
+  private async vote(idea: Idea, user: User, vote: Votes) {
+    const opposite = vote === Votes.UP ? Votes.DOWN : Votes.UP;
+    if (
+      idea[opposite].filter(voter => voter.id === user.id).length > 0 ||
+      idea[vote].filter(voter => voter.id !== user.id).length > 0
+    ) {
+      idea[opposite] = idea[opposite].filter(voter => voter.id !== user.id);
+      idea[vote] = idea[vote].filter(voter => voter.id !== user.id);
+
+      await this.ideasRepository.save(idea);
+    } else if (idea[vote].filter(voter => voter.id === user.id).length < 1) {
+      idea[vote].push(user);
+      await this.ideasRepository.save(idea);
+    } else {
+      throw new HttpException('Unable to cast vote', HttpStatus.BAD_REQUEST);
+    }
+
+    return idea;
+  }
+
   private toResponseObject(idea: Idea): IdeaRO {
     const resObj: any = {
       ...idea,
       author: idea.author ? idea.author.toResponseObject(false) : null,
     };
+    if (resObj.upvotes) {
+      resObj.upvotes = idea.upvotes.length;
+    }
+    if (resObj.downvotes) {
+      resObj.downvotes = idea.downvotes.length;
+    }
+
     return resObj;
   }
 

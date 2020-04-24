@@ -2,7 +2,7 @@
 #
 :headers = <<
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4YzQ3MjlmLTEzOWItNGY0MC05MTk4LWU3YmZkZDY3ZTUyYyIsInVzZXJuYW1lIjoiemF5YW4iLCJpYXQiOjE1ODc1NDY2NzgsImV4cCI6MTU4ODE1MTQ3OH0.scnsdjv_lsDd9h2jbUmQ5sTnyUEkeqqjDr29JSFQZAU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4YzQ3MjlmLTEzOWItNGY0MC05MTk4LWU3YmZkZDY3ZTUyYyIsInVzZXJuYW1lIjoiemF5YW4iLCJpYXQiOjE1ODc3MDYyMTIsImV4cCI6MTU4ODMxMTAxMn0.TskZ3UUaN0O_2M93i-4-W4nmozPQQBI27S9kRdWVd8Q
 #
 
 # Get users
@@ -22,6 +22,6 @@ POST http://localhost:4000/api/users/login
 content-type: application/json
 
 {
-    "username": "zayan",
-    "password": "habijabi"
+    "username": "nusayra",
+    "password": "123456"
 }

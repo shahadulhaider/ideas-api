@@ -58,6 +58,34 @@ export class IdeasController {
     return this.ideasService.destroy(id, user);
   }
 
+  @Post(':id/bookmark')
+  @UseGuards(AuthGuard)
+  bookmarkIdea(@Param('id') id: string, @User('id') userId: string) {
+    this.logData({ id, user: userId });
+    return this.ideasService.bookmark(id, userId);
+  }
+
+  @Delete(':id/bookmark')
+  @UseGuards(AuthGuard)
+  unbookmarkIdea(@Param('id') id: string, @User('id') userId: string) {
+    this.logData({ id, user: userId });
+    return this.ideasService.unbookmark(id, userId);
+  }
+
+  @Post(':id/upvote')
+  @UseGuards(AuthGuard)
+  upvoteIdea(@Param('id') id: string, @User('id') userId: string) {
+    this.logData({ id, user: userId });
+    return this.ideasService.upvote(id, userId);
+  }
+
+  @Post(':id/downvote')
+  @UseGuards(AuthGuard)
+  downvoteIdea(@Param('id') id: string, @User('id') userId: string) {
+    this.logData({ id, user: userId });
+    return this.ideasService.downvote(id, userId);
+  }
+
   private logData(options: any) {
     options.user && this.logger.log('USER ' + JSON.stringify(options.user));
     options.data && this.logger.log('DATA ' + JSON.stringify(options.data));

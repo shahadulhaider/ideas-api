@@ -8,6 +8,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { UserRO } from './user.ro';
 import { Idea } from 'src/ideas/idea.entity';
@@ -35,6 +37,10 @@ export class User extends BaseEntity {
   )
   ideas: Idea[];
 
+  @ManyToMany(type => Idea, { cascade: true })
+  @JoinTable()
+  bookmarks: Idea[];
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
@@ -59,6 +65,9 @@ export class User extends BaseEntity {
     }
     if (this.ideas) {
       resObj.ideas = this.ideas;
+    }
+    if (this.bookmarks) {
+      resObj.bookmarks = this.bookmarks;
     }
     return resObj;
   }

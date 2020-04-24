@@ -1,8 +1,5 @@
 # _*_ restclient _*_
-:auth = Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4YzQ3MjlmLTEzOWItNGY0MC05MTk4LWU3YmZkZDY3ZTUyYyIsInVzZXJuYW1lIjoiemF5YW4iLCJpYXQiOjE1ODc0ODI2NjIsImV4cCI6MTU4ODA4NzQ2Mn0.cGy3eNB1p7TmslfAPRhdJV0N9F-Awhg89zDLtcDNiOM
-
-# main route
-GET http://localhost:4000/api/
+:auth = Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc2MTBhZDhjLWM4OTEtNDYwYi05MDk0LTMzMjdiZDk0YTAyMSIsInVzZXJuYW1lIjoibnVzYXlyYSIsImlhdCI6MTU4NzcyOTY1MCwiZXhwIjoxNTg4MzM0NDUwfQ.pCyn5ehs_iSRSZzvNsD58fyvWHEb5cWHHkJ-gx5m7pI
 
 # Get all ideas
 GET http://localhost:4000/api/ideas
@@ -14,8 +11,8 @@ content-type: application/json
 :auth
 
 {
-    "idea": "hello world",
-    "description": "hello from restclient"
+    "idea": "play play",
+    "description": "play with zayan"
 }
 # test not found
 GET http://localhost:4000/api/ideas
@@ -40,5 +37,18 @@ DELETE http://localhost:4000/api/ideas/e8243bca-f0db-46e0-81d1-6b89a2ef9f3c
 :auth
 
 
-# Get filtered ideas
-GET http://localhost:4000/api/ideas
+# Bookmark an Idea
+POST http://localhost:4000/api/ideas/cfc930d8-8b3e-44ea-8d6c-23704fec56cb/bookmark
+:auth
+
+# Unbookmark an Idea
+DELETE http://localhost:4000/api/ideas/cfc930d8-8b3e-44ea-8d6c-23704fec56cb/bookmark
+:auth
+
+# Upvote an Idea
+POST http://localhost:4000/api/ideas/cfc930d8-8b3e-44ea-8d6c-23704fec56cb/upvote
+:auth
+
+# Downvote an Idea
+POST http://localhost:4000/api/ideas/cfc930d8-8b3e-44ea-8d6c-23704fec56cb/downvote
+:auth
