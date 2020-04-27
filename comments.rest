@@ -1,0 +1,35 @@
+# _*_ restclient _*_
+#
+:ideaId = a2ef84c0-a07a-4db8-bf71-d2f0a2b51501
+:userId = 7610ad8c-c891-460b-9094-3327bd94a021
+:commentId = 784fbe33-ff01-4388-b1df-46a8f6eeef31
+#
+:auth = Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc2MTBhZDhjLWM4OTEtNDYwYi05MDk0LTMzMjdiZDk0YTAyMSIsInVzZXJuYW1lIjoibnVzYXlyYSIsImlhdCI6MTU4Nzk3ODY2OCwiZXhwIjoxNTg4NTgzNDY4fQ.wVcyPoyi_zl3-0Qb4hCPad_KW_hq9wqSoWtOSZLWtkM
+
+
+# Show comments by idea
+GET http://localhost:4000/api/comments/idea/:ideaId
+
+
+# Show comments by user
+GET http://localhost:4000/api/comments/user/:userId
+
+
+# Create a comment
+POST http://localhost:4000/api/comments/idea/:ideaId
+content-type: application/json
+:auth
+
+{
+    "comment": "this is fantastic idea"
+}
+
+
+# Get a comment
+GET http://localhost:4000/api/comments/:commentId
+
+
+# Delete a comments
+DELETE http://localhost:4000/api/comments/:commentid
+:auth
+

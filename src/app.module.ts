@@ -10,6 +10,7 @@ import { CustomValidationPipe } from './shared/custom-validation.pipe';
 import { HttpErrorFilter } from './shared/http-error.filter';
 import { LoggingInterceptor } from './shared/logging.interceptor';
 import { UsersModule } from './users/users.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forRoot(typeOrmConfig),
     IdeasModule,
     UsersModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [

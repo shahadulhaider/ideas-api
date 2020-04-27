@@ -32,12 +32,12 @@ export class User extends BaseEntity {
   password: string;
 
   @OneToMany(
-    type => Idea,
+    _type => Idea,
     idea => idea.author,
   )
   ideas: Idea[];
 
-  @ManyToMany(type => Idea, { cascade: true })
+  @ManyToMany(_type => Idea, { cascade: true })
   @JoinTable()
   bookmarks: Idea[];
 

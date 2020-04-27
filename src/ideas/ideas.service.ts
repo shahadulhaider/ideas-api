@@ -18,7 +18,7 @@ export class IdeasService {
 
   async getAll(): Promise<IdeaRO[]> {
     const ideas = await this.ideasRepository.find({
-      relations: ['author', 'upvotes', 'downvotes'],
+      relations: ['author', 'upvotes', 'downvotes', 'comments'],
     });
     return ideas.map(idea => this.toResponseObject(idea));
   }
@@ -33,7 +33,7 @@ export class IdeasService {
   async read(id: string): Promise<IdeaRO> {
     try {
       const idea = await this.ideasRepository.findOne(id, {
-        relations: ['author', 'upvotes', 'downvotes'],
+        relations: ['author', 'upvotes', 'downvotes', 'comments'],
       });
       return this.toResponseObject(idea);
     } catch (err) {
@@ -48,7 +48,7 @@ export class IdeasService {
   ): Promise<IdeaRO> {
     try {
       const idea = await this.ideasRepository.findOne(id, {
-        relations: ['author'],
+        relations: ['author', 'comments'],
       });
 
       this.ensureOwnership(idea, userId);
@@ -62,7 +62,7 @@ export class IdeasService {
   async destroy(id: string, userId: string): Promise<any> {
     try {
       const idea = await this.ideasRepository.findOne(id, {
-        relations: ['author'],
+        relations: ['author', 'comments'],
       });
 
       this.ensureOwnership(idea, userId);
@@ -90,7 +90,7 @@ export class IdeasService {
       );
     }
 
-    return user.toResponseObject();
+    return user.toResponseObject(false);
   }
 
   async unbookmark(id: string, userId: string) {
@@ -112,12 +112,12 @@ export class IdeasService {
       );
     }
 
-    return user.toResponseObject();
+    return user.toResponseObject(false);
   }
 
   async upvote(id: string, userId: string) {
     let idea = await this.ideasRepository.findOne(id, {
-      relations: ['author', 'upvotes', 'downvotes'],
+      relations: ['author', 'upvotes', 'downvotes', 'comments'],
     });
     const user = await this.userRepository.findOne({ id: userId });
 
@@ -127,7 +127,7 @@ export class IdeasService {
 
   async downvote(id: string, userId: string) {
     let idea = await this.ideasRepository.findOne(id, {
-      relations: ['author', 'upvotes', 'downvotes'],
+      relations: ['author', 'upvotes', 'downvotes', 'comments'],
     });
     const user = await this.userRepository.findOne({ id: userId });
 
