@@ -16,9 +16,12 @@ export class IdeasService {
     private userRepository: Repository<User>,
   ) {}
 
-  async getAll(): Promise<IdeaRO[]> {
+  async getAll(page: number = 1, newest?: boolean): Promise<IdeaRO[]> {
     const ideas = await this.ideasRepository.find({
       relations: ['author', 'upvotes', 'downvotes', 'comments'],
+      take: 25,
+      skip: 25 * (page - 1),
+      order: newest && { created: 'DESC' },
     });
     return ideas.map(idea => this.toResponseObject(idea));
   }

@@ -9,6 +9,7 @@ import {
   Put,
   UseGuards,
   UsePipes,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '../shared/auth.guard';
 import { CustomValidationPipe } from '../shared/custom-validation.pipe';
@@ -22,8 +23,13 @@ export class IdeasController {
   private logger = new Logger('IdeasController');
 
   @Get()
-  getAllIdeas() {
-    return this.ideasService.getAll();
+  getAllIdeas(@Query('page') page: number) {
+    return this.ideasService.getAll(page);
+  }
+
+  @Get('/newest')
+  getAllNewestIdeas(@Query('page') page: number) {
+    return this.ideasService.getAll(page, true);
   }
 
   @Post()

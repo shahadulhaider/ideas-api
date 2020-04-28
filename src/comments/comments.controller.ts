@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
   UsePipes,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/shared/auth.guard';
 import { CustomValidationPipe } from 'src/shared/custom-validation.pipe';
@@ -20,15 +21,15 @@ export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   @Get('idea/:id')
-  showCommentsByIdea(@Param('id') ideaId: string) {
+  showCommentsByIdea(@Param('id') ideaId: string, @Query('page') page: number) {
     this.logData({ ideaId });
-    return this.commentsService.showCommentsByIdea(ideaId);
+    return this.commentsService.showCommentsByIdea(ideaId, page);
   }
 
   @Get('user/:id')
-  showCommentsByUser(@Param('id') userId: string) {
+  showCommentsByUser(@Param('id') userId: string, @Query('page') page: number) {
     this.logData({ userId });
-    return this.commentsService.ShowCommentsByUser(userId);
+    return this.commentsService.ShowCommentsByUser(userId, page);
   }
 
   @Post('idea/:id')

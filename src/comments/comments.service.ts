@@ -15,20 +15,31 @@ export class CommentsService {
     @InjectRepository(Idea) private ideasRepository: Repository<Idea>,
   ) {}
 
-  async showCommentsByIdea(ideaId: string): Promise<CommentRO[]> {
-    const idea = await this.ideasRepository.findOne(ideaId, {
+  async showCommentsByIdea(
+    ideaId: string,
+    page: number = 1,
+  ): Promise<CommentRO[]> {
+    const comments = await this.commentsRepository.find({
+      where: { ideaId },
       relations: ['comments', 'comments.author', 'comments.idea'],
+      take: 25,
+      skip: 25 * (page - 1),
     });
-    if (!idea) {
-      throw new HttpException('Idea not found', HttpStatus.NOT_FOUND);
+    if (!comments) {
+      throw new HttpException('Comments not found', HttpStatus.NOT_FOUND);
     }
-    return idea.comments.map(comment => this.toResponseObject(comment));
+    return comments.map(comment => this.toResponseObject(comment));
   }
 
-  async ShowCommentsByUser(userId: string): Promise<CommentRO[]> {
+  async ShowCommentsByUser(
+    userId: string,
+    page: number = 1,
+  ): Promise<CommentRO[]> {
     const comments = await this.commentsRepository.find({
       where: { author: userId },
       relations: ['author'],
+      take: 25,
+      skip: 25 * (page - 1),
     });
     if (!comments) {
       throw new HttpException('Comments not found', HttpStatus.NOT_FOUND);
@@ -49,6 +60,7 @@ export class CommentsService {
       idea,
       author: user,
     });
+
     await this.commentsRepository.save(comment);
 
     return this.toResponseObject(comment);
