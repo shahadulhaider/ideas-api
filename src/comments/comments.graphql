@@ -1,0 +1,9 @@
+type Comment {
+  id: ID!
+  created: String!
+  comment: String!
+}
+
+type Query {
+  comments(page: Int): [Comment!]
+}

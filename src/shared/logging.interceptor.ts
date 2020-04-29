@@ -7,24 +7,44 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest();
-    const { method, url } = req;
     const now = Date.now();
 
-    return next
-      .handle()
-      .pipe(
-        tap(() =>
-          Logger.log(
-            `${method} ${url} ${Date.now() - now}ms`,
-            context.getClass().name,
-            false,
+    if (req) {
+      const { method, url } = req;
+
+      return next
+        .handle()
+        .pipe(
+          tap(() =>
+            Logger.log(
+              `${method} ${url} ${Date.now() - now}ms`,
+              context.getClass().name,
+              false,
+            ),
           ),
-        ),
-      );
+        );
+    } else {
+      const ctx = GqlExecutionContext.create(context);
+      const resolverName = ctx.getClass().name;
+      const info = ctx.getInfo();
+
+      return next
+        .handle()
+        .pipe(
+          tap(() =>
+            Logger.log(
+              `${info.parentType} "${info.fieldName}" ${Date.now() - now}ms`,
+              resolverName,
+              false,
+            ),
+          ),
+        );
+    }
   }
 }
