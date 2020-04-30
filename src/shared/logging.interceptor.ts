@@ -33,8 +33,6 @@ export class LoggingInterceptor implements NestInterceptor {
       const ctx = GqlExecutionContext.create(context);
       const resolverName = ctx.getClass().name;
       const info = ctx.getInfo();
-      // console.log(ctx);
-      // console.log(info);
 
       return next
         .handle()

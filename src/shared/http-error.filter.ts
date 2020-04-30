@@ -1,18 +1,24 @@
 import {
-  ExceptionFilter,
-  Catch,
-  HttpException,
   ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql';
+import { Request, Response } from 'express';
+import { GraphQLResolveInfo } from 'graphql';
 
 @Catch()
-export class HttpErrorFilter implements ExceptionFilter {
+export class HttpErrorFilter implements ExceptionFilter, GqlExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const request = ctx.getRequest();
-    const response = ctx.getResponse();
+    const request = ctx.getRequest<Request>();
+    const response = ctx.getResponse<Response>();
+
+    const gqlHost = GqlArgumentsHost.create(host);
+    const info = gqlHost.getInfo<GraphQLResolveInfo>();
 
     const status =
       exception instanceof HttpException && exception.getStatus
@@ -30,8 +36,6 @@ export class HttpErrorFilter implements ExceptionFilter {
       statusCode: status,
       timestamp: new Date().toDateString(),
       name: exception.name,
-      path: request.url,
-      method: request.method,
       message,
       error,
     };
@@ -40,13 +44,34 @@ export class HttpErrorFilter implements ExceptionFilter {
       console.error(exception);
     }
 
-    Logger.error(
-      `${request.method} ${request.url}`,
-      JSON.stringify(errorResponse, null, 4),
-      `ExceptionFilter`,
-      false,
-    );
+    if (request) {
+      const error = {
+        ...errorResponse,
+        path: request.url,
+        method: request.method,
+      };
 
-    response.status(status).json(errorResponse);
+      Logger.error(
+        `${request.method} ${request.url}`,
+        JSON.stringify(error, null, 4),
+        `ExceptionFilter`,
+        false,
+      );
+      response.status(status).json(error);
+    } else {
+      const error = {
+        ...errorResponse,
+        type: info.parentType,
+        field: info.fieldName,
+      };
+
+      Logger.error(
+        `${request.method} ${request.url}`,
+        JSON.stringify(error, null, 4),
+        `ExceptionFilter`,
+        false,
+      );
+      return exception;
+    }
   }
 }
