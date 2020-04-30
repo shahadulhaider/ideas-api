@@ -5,5 +5,10 @@ type Comment {
 }
 
 type Query {
-  comments(page: Int): [Comment!]
+  comment(id: ID!): Comment
+}
+
+type Mutation {
+  createComment(idea: ID!, comment: String!): Comment
+  deleteComment(id: ID!): Comment
 }

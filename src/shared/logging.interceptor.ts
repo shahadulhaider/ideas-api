@@ -34,7 +34,7 @@ export class LoggingInterceptor implements NestInterceptor {
       const resolverName = ctx.getClass().name;
       const info = ctx.getInfo();
       // console.log(ctx);
-      console.log(info);
+      // console.log(info);
 
       return next
         .handle()
