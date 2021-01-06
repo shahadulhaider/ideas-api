@@ -51,7 +51,7 @@ export class IdeasService {
   ): Promise<IdeaRO> {
     try {
       const idea = await this.ideasRepository.findOne(id, {
-        relations: ['author', 'comments'],
+        relations: ['author', 'upvotes', 'downvotes', 'comments'],
       });
 
       this.ensureOwnership(idea, userId);

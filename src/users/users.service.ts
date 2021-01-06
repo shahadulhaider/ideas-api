@@ -12,7 +12,7 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  async getAllUsers(page: number = 1): Promise<UserRO[]> {
+  async getAllUsers(page = 1): Promise<UserRO[]> {
     const users = await this.userRepository.find({
       relations: ['ideas', 'bookmarks'],
       take: 25,

@@ -28,7 +28,7 @@ export class HttpErrorFilter implements ExceptionFilter, GqlExceptionFilter {
     const message =
       status !== HttpStatus.INTERNAL_SERVER_ERROR
         ? exception.message || null
-        : 'Internal server error';
+f: 'Internal server error';
 
     const { error } = JSON.parse(JSON.stringify(exception.getResponse()));
 
